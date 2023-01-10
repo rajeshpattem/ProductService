@@ -25,6 +25,10 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation platform('org.testcontainers:testcontainers-bom:1.17.6') //import bom
+    testImplementation('org.testcontainers:mysql') //no version specified
+    testImplementation "org.testcontainers:mongodb"
+    testImplementation "org.testcontainers:junit-jupiter"
 }
 
 tasks.named('test') {
