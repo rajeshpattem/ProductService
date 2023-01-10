@@ -1,8 +1,11 @@
 package com.example.productservice;
 
 import com.example.productservice.Dto.ProductDto;
+import com.example.productservice.Repository.ProductRepository;
+import com.example.productservice.Service.ProductService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,6 +36,12 @@ class ProductServiceApplicationTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductService productService;
+
     @Container
     static final MongoDBContainer mongoDBContainer = new MongoDBContainer(DockerImageName.parse("mongo:4.0.10"));
 
@@ -49,6 +58,10 @@ class ProductServiceApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productDto)))
                 .andExpect(status().isCreated());
+        mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8081/api/product/getAllProducts"))
+                .andExpect(status().isOk());
+
+        Assert.assertEquals(1, productRepository.findAll().size());
     }
 
 }
